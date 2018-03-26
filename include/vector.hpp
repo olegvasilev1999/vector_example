@@ -1,5 +1,8 @@
 #include <iostream>
 
+#include <algorithm>
+#include <cassert>
+
 template <typename T>
 class vector_t
 {
@@ -29,9 +32,6 @@ public:
 };
 
 bool operator !=(vector_t<T> const & lhs, vector_t<T> const & rhs);
-
-#include <algorithm>
-#include <cassert>
 
 template <typename T>
 vector_t<T>::vector_t()
