@@ -3,17 +3,19 @@
 
 #include "vector.hpp"
 
-vector_t::vector_t()
+template <typename T>
+vector_t<T>::vector_t()
 {
 	elements_ = nullptr;
 	size_ = 0;
 	capacity_ = 0;
 }
 
-vector_t::vector_t(vector_t const & other)
+template <typename T>
+vector_t<T>::vector_t(vector_t const & other)
 {
     	
-  	elements_ = new int [other.capacity_];
+  	elements_ = new T [other.capacity_];
     	for (std::size_t i = 0; i < other.capacity_; i++) {
  	     elements_[i] = other.elements_[i];
   	}
@@ -21,13 +23,14 @@ vector_t::vector_t(vector_t const & other)
     	capacity_ = other.capacity_;
 }
 
-vector_t & vector_t::operator =(vector_t const & other)
+template <typename T>
+vector_t<T> & vector_t<T>::operator =(vector_t const & other)
 {
 	if (elements_ != nullptr){
 		delete [] elements_;
 	}
 	
-	elements_ = new int [other.capacity_];
+	elements_ = new T [other.capacity_];
     	for (std::size_t i = 0; i < other.capacity_; i++) {
         	elements_[i] = other.elements_[i];
     	}
@@ -36,7 +39,8 @@ vector_t & vector_t::operator =(vector_t const & other)
 	return *this;
 }
 
-bool vector_t::operator ==(vector_t const & other) const
+template <typename T>
+bool vector_t<T>::operator ==(vector_t const & other) const
 {
 	if (size_ != other.size_){
 		return false;		
@@ -52,51 +56,56 @@ bool vector_t::operator ==(vector_t const & other) const
 	}
 }
 
-vector_t::~vector_t()
+template <typename T>
+vector_t<T>::~vector_t()
 {
 	if (elements_ != nullptr){
 		delete[] elements_;
 	}
-	
 }
 
-std::size_t vector_t::size() const
+template <typename T>
+std::size_t vector_t<T>::size() const
 {
     return size_;
 }
 
-std::size_t vector_t::capacity() const
+template <typename T>
+std::size_t vector_t<T>::capacity() const
 {
     return capacity_;
 }
 
-void vector_t::push_back(int value)
+template <typename T>
+void vector_t<T>::push_back(T value)
 {
 	if (elements_ == nullptr){
 		size_ = 1;
 		capacity_ = 1;
-		elements_ = new int [capacity_];
+		elements_ = new T [capacity_];
 		elements_[size_-1] = value;
 	}else
 	{
 		size_++;
 		if (size_ > capacity_){
 			capacity_ *= 2;
-			int * elements = new int [size_];
+			T * elements = new T [size_];
 			for (std::size_t i = 0; i < size_ - 1; i++){
 				elements[i] = elements_[i];
 			}
 			elements[size_-1] = value;
 			delete[] elements_;
-			elements_ = new int [capacity_];
+			elements_ = new T [capacity_];
 			for (std::size_t i = 0; i < size_ - 1; i++){
 				elements_[i] = elements[i];
 			}
+			delete[] elements;
 		}else elements_[size_-1] = value;
 	}
 }
 
-void vector_t::pop_back()
+template <typename T>
+void vector_t<T>::pop_back()
 {
 	if (elements_ == nullptr){
 		return;
@@ -107,29 +116,33 @@ void vector_t::pop_back()
 			capacity_ /= 2;
 		}
 		
-		int * elements = new int [size_];
+		T * elements = new T [size_];
 		for (std::size_t i = 0; i < size_; i++){
 			elements[i] = elements_[i];
 		}
 		delete[] elements_;
-		elements_ = new int [capacity_];
+		elements_ = new T [capacity_];
 		for (std::size_t i = 0; i < size_; i++){
 			elements_[i] = elements[i];
 		}
+		delete[] elements;
 	}
 }
 
-int & vector_t::operator [](std::size_t index)
+template <typename T>
+T & vector_t<T>::operator [](std::size_t index)
 {
 	return elements_[index];
 }
 
-int vector_t::operator [](std::size_t index) const
+template <typename T>
+T vector_t<T>::operator [](std::size_t index) const
 {
 	return elements_[index];
 }
 
-bool operator !=(vector_t const & lhs, vector_t const & rhs)
+template <typename T>
+bool operator !=(vector_t<T> const & lhs, vector_t<T> const & rhs)
 {
 	if (lhs==rhs){
 	return false;
